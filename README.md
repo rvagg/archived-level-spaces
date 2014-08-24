@@ -50,11 +50,12 @@ var done = after(4, dump)
 
 function dump () {
   db.createReadStream().on('data', console.log)
-}```
+}
+```
 
 Gives us the output:
 
-```
+```text
 [foo 0] = [bar 0]
 [foo 1] = [bar 1]
 [foo 2] = [bar 2]
