@@ -5,11 +5,12 @@ var levelup   = require('levelup')
   , separator = '\xff'
 
 
-function space (db, prefix) {
+function space (db, prefix, options) {
   if (typeof prefix != 'string')
     throw new TypeError('prefix must be a String')
 
-  var sp = separator + prefix + separator
+  var sp      = separator + prefix + separator
+    , options = xtend(options)
 
   function encode (key) {
     if (key == null)
@@ -44,7 +45,13 @@ function space (db, prefix) {
     return ud
   }
 
-  return levelup({ db: factory })
+  if (options.keyEncoding != 'ascii')
+    options.keyEncoding = 'utf8'
+
+  options.db = factory
+
+
+  return levelup(options)
 }
 
 

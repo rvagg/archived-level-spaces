@@ -70,9 +70,11 @@ Note how each LevelUP instance appears to be writing and reading in the same way
 
 ## API
 
-### spaces(db, namespace)
+### spaces(db, namespace[, options])
 
 Create a new LevelUP instance from an existing one (supplied as `db`) where keys are namespaced into the `namespace` string.
+
+The optional `options` object will be passed to LevelUP.
 
 ## License
 
