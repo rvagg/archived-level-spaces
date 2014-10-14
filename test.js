@@ -504,6 +504,24 @@ test('test batch @ multiple levels', dbWrap(function (t, ldb) {
   })
 }))
 
+test('works with options.valueEncoding: json', dbWrap(function (t, ldb) {
+  var thing = { one: 'two', three: 'four' }
+  var opt = {valueEncoding: 'json'}
+  var jsonDb = spaces(ldb, 'json-things', opt)
+
+  jsonDb.put('thing', thing, opt, function (err) {
+    t.ifError(err, 'no error')
+
+    jsonDb.get('thing', opt, function (err, got) {
+      t.ifError(err, 'no error')
+      t.ok(got, 'got something back!')
+      t.equal(typeof got, 'object', 'got back an object') //this currently fails
+      t.deepEqual(got, thing, 'got back the right thing') //this currently fails
+      t.end()
+    })
+  })
+}))
+
 
 function readStreamTest (options) {
   test('test readStream with ' + inspect(options), function (t) {
