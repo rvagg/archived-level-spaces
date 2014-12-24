@@ -17,11 +17,13 @@ Inspired by [level-sublevel](https://github.com/dominictarr/level-sublevel), **l
 
 Currently **level-spaces** **only supports `String` keys** (UTF-8), although LevelUP may pass it stringified JSON objects as keys as well (this is transparent). If you have more complicated needs for your keys then you should consider **[level-sublevel](https://github.com/rvagg/level-sublevel)** instead.
 
-A namespace is specified as a `String`. This `String` has the character `\xff` (`'ÿ'`) prepended to the beginning and appended to the end and is then *prefixed* to all reads and writes to the underlying LevelUP.
+A namespace is specified as a `String`. This `String` has the character `~` (configurable) prepended to the beginning and appended to the end and is then *prefixed* to all reads and writes to the underlying LevelUP.
 
-So, if you have a namespace of `'foobar'`, all keys written will transparently be prefixed with `'\xfffoobar\xff'` and all reads will have keys transparently prefixed with `'\xfffoobar\xff'`. All keys that come from an iterator / read-stream will also have `'\xfffoobar\xff'` removed from them, making the prefixing entirely transparent. You will not be able to see the raw keys from a **level-spaces** instance but they will be visible from the LevelUP used to create it.
+So, if you have a namespace of `'foobar'`, all keys written will transparently be prefixed with `'~foobar~'` and all reads will have keys transparently prefixed with `'~foobar~'`. All keys that come from an iterator / read-stream will also have `'~foobar~'` removed from them, making the prefixing entirely transparent. You will not be able to see the raw keys from a **level-spaces** instance but they will be visible from the LevelUP used to create it.
 
-If you have multiple levels of **level-spaces** you will end up with multiple prefixes appended one after the other, each surrounded by `\xff`. So a **level-spaces** instance with the prefix `'foobar'` that is passed back in to create a new **level-spaces** instance with a prefix `'doobar'` will end up using keys prefixed with `\xfffoobar\xff\xffdoobar\xff`.
+Note, however, that **child namespaces will not be hidden** from within a level-spaces instance. If you have a heirarchy of namespaces, or are using additional libaries that do, take care, particularly when using read streams, to operate only on the keys you actually want.
+
+If you have multiple levels of **level-spaces** you will end up with multiple prefixes appended one after the other, each surrounded by `~`. So a **level-spaces** instance with the prefix `'foobar'` that is passed back in to create a new **level-spaces** instance with a prefix `'doobar'` will end up using keys prefixed with `~foobar~~doobar~`.
 
 Additionally, when you call `createReadStream()` on a LevelUP created by **level-spaces**, the options will be rewritten to properly account for the underlying namespace: `'start'`, `'end'`, `'gt'`, `'gte'`, `'lt'`, `'lte'`, so the LevelUP read-stream operates only within the namespace as if there was no other range of keys in the store.
 
@@ -75,7 +77,9 @@ Note how each LevelUP instance appears to be writing and reading in the same way
 
 Create a new LevelUP instance from an existing one (supplied as `db`) where keys are namespaced into the `namespace` string.
 
-The optional `options` object will be passed to LevelUP.
+The optional `options` object will be passed to LevelUP but can also contain:
+
+* `'separator'`: to override the default `'~'` separator with something custom.
 
 ## License
 
