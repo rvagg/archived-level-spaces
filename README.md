@@ -39,10 +39,11 @@ var db       = levelup('foo.db')
 
 var done = after(4, dump)
 
-;[ db, space1, space2, space1_1 ].forEach(function (db) {
-  db.put('foo', 'bar', function () {
-    db.get('foo', function (err, value) {
-      console.log('[%s] = [%s]', 'foo', value)
+;[ db, space1, space2, space1_1 ].forEach(function (db, i) {
+  var key = 'foo ' + i
+  db.put(key, 'bar ' + i, function () {
+    db.get(key, function (err, value) {
+      console.log('[%s] = [%s]', key, value)
       done()
     })
   })
