@@ -575,6 +575,7 @@ test('explicit json on put valueEncoding raw entry', dbWrap(function (t, ldb) {
 }))
 
 
+/*
 test('nested value encodings, utf8 on top', function (t) {
   var db  = levelup(testDb, { valueEncoding: 'json' })
     , sp1 = spaces(db, 'sp1', { valueEncoding: 'utf8' })
@@ -637,7 +638,7 @@ test('nested value encodings, override', function (t) {
     })
   })
 })
-
+*/
 
 function readStreamTest (options) {
   test('test readStream with ' + inspect(options), function (t) {
