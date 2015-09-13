@@ -109,11 +109,15 @@ function mkPreIterator (encode, decode) {
     // kudos to @dominictarr for most of this logic
     if (options.start != null || options.end != null) {
       if (!options.reverse) {
-        options.gte = options.start || '\x00'
-        options.lte = options.end   || '\x7f'
+        if (options.gte == null)
+          options.gte = options.start || '\x00'
+        if (options.lte == null)
+          options.lte = options.end   || '\x7f'
       } else {
-        options.gte = options.end   || '\x00'
-        options.lte = options.start || '\x7f'
+        if (options.gte == null)
+          options.gte = options.end   || '\x00'
+        if (options.lte == null)
+          options.lte = options.start || '\x7f'
       }
       delete options.start
       delete options.end
@@ -147,8 +151,7 @@ function mkPreIterator (encode, decode) {
 function mkPreNext (decode) {
   return function preNext (err, key, value, callback, next) {
     if (err)
-      return next(err, key, value, callback)
-
+      return next(err, key && decode(key), value, callback)
     next(err, decode(key), value, callback)
   }
 }
