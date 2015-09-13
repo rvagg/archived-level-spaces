@@ -1,6 +1,6 @@
 {
   "name": "level-spaces",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Namespaced LevelUP instances",
   "main": "level-spaces.js",
   "scripts": {
